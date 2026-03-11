@@ -25,23 +25,16 @@ services:
       - .env
     environment:
       - POSTGRES_HOST=postgres
-      - PYTHONPATH=/app/src
+      - AEGRA_CONFIG=/app/aegra.json
     depends_on:
       postgres:
         condition: service_healthy
     volumes:
       - ./aegra.json:/app/aegra.json:ro
       - ./examples:/app/examples:ro
-      - ./libs/aegra-api/src:/app/src:ro  # Mount full src for PYTHONPATH to work
-      - ./libs/aegra-api/alembic:/app/alembic:ro # for migrations
+      - ./libs/aegra-api/src:/app/src:ro
       - ./.env:/app/.env:ro
-    command: >
-      sh -c "
-        echo 'Running database migrations...' &&
-        alembic upgrade head &&
-        echo 'Starting Aegra server...' &&
-        uvicorn aegra_api.main:app --host 0.0.0.0 --port $${PORT:-8000} --reload
-      "
+    command: ["aegra", "dev", "--no-db-check", "--host", "0.0.0.0", "--port", "${PORT:-8000}"]
 
   # Redis (optional - for advanced queuing in future phases)
   redis:
