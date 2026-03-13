@@ -26,6 +26,7 @@ services:
     environment:
       - POSTGRES_HOST=postgres
       - AEGRA_CONFIG=/app/aegra.json
+      - PYTHONPATH=/app/src
     depends_on:
       postgres:
         condition: service_healthy
@@ -34,7 +35,7 @@ services:
       - ./examples:/app/examples:ro
       - ./libs/aegra-api/src:/app/src:ro
       - ./.env:/app/.env:ro
-    command: ["aegra", "dev", "--no-db-check", "--host", "0.0.0.0", "--port", "${PORT:-8000}"]
+    command: ["aegra", "serve", "--host", "0.0.0.0", "--port", "${PORT:-8000}"]
 
   # Redis (optional - for advanced queuing in future phases)
   redis:

@@ -28,9 +28,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy workspace root (needed for uv export) and both packages
+# Copy workspace root (needed for uv export) and both packages.
 COPY pyproject.toml uv.lock ./
 COPY libs/aegra-api/pyproject.toml libs/aegra-api/README.md ./libs/aegra-api/
+COPY libs/aegra-api/alembic.ini ./libs/aegra-api/alembic.ini
+COPY libs/aegra-api/alembic/ ./libs/aegra-api/alembic/
 COPY libs/aegra-cli/pyproject.toml libs/aegra-cli/README.md ./libs/aegra-cli/
 
 # Install dependencies from lockfile
@@ -40,8 +42,6 @@ RUN uv export --frozen --package aegra-cli --no-emit-project --format=requiremen
 
 # Copy source code for both packages
 COPY libs/aegra-api/src/ ./libs/aegra-api/src/
-COPY libs/aegra-api/alembic.ini ./libs/aegra-api/alembic.ini
-COPY libs/aegra-api/alembic/ ./libs/aegra-api/alembic/
 COPY libs/aegra-cli/src/ ./libs/aegra-cli/src/
 
 # Install both packages (aegra-cli depends on aegra-api)
