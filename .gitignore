@@ -33,8 +33,3 @@ htmlcov/
 
 # MacOS
 .DS_Store
-
-.mcp.json
-.hive-mind/**
-.claude/**
-.claude-flow/**
